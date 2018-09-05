@@ -28,7 +28,7 @@ import datetime
 initDate = datetime.date(1901, 1, 13)
 
 """ A tuple of years with 27 pay periods"""
-yearPPs = (1911, 1922, 1933, 1944, 1956,
+year27PPs = (1911, 1922, 1933, 1944, 1956,
             1967, 1978, 1989, 2000, 2012,
             2023, 2034, 2045, 2056, 2067)
 
