@@ -24,3 +24,44 @@ At the end of the 56th year, the cycle resets and begins anew.
 """
 
 import datetime
+
+initDate = datetime.date(1901, 1, 13)
+
+""" A tuple of years with 27 pay periods"""
+yearPPs = (1911, 1922, 1933, 1944, 1956,
+            1967, 1978, 1989, 2000, 2012,
+            2023, 2034, 2045, 2056, 2067)
+
+def yearStart(initial, target, yearArray):
+    """yearStart() calculates the first day of the first pay period of a target
+    pay year.
+
+    "Initial" must be a datetime.date corrlating to the first day of the first
+    pay period of a known year. The initDate global constant is recommended.
+
+    "Target" is the target year as an integer.
+
+    "YearArray" is an array (list, tuple, sequence) of years with 27 pay periods.
+    """
+
+    initYear = initial.year
+    diff = target - initYear
+    daysToAdd = 0
+
+    for yr in range(diff):
+        if (initYear + yr) in yearArray:
+            daysToAdd += 14 * 27
+        else: daysToAdd += 14 * 26
+
+    return initial + datetime.timedelta(days = daysToAdd)
+
+def ppStart(yearStart, pp, yearArray):
+    """Using the first day of the first pay period of a pay year as a staring
+    point, this function returns the start date of the target pay period.
+    """
+
+    if pp > 27 or (pp > 26 and yearStart.year not in yearArray):
+        # Change to raise PayPeriodError
+        return None
+
+    return yearStart + datetime.timedelta(days = (pp - 1) * 14)
