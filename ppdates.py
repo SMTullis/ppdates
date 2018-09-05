@@ -36,12 +36,12 @@ def yearStart(initial, target, yearArray):
     """yearStart() calculates the first day of the first pay period of a target
     pay year.
 
-    "Initial" must be a datetime.date corrlating to the first day of the first
+    "initial" must be a datetime.date corrlating to the first day of the first
     pay period of a known year. The initDate global constant is recommended.
 
-    "Target" is the target year as an integer.
+    "target" is the target year as an integer.
 
-    "YearArray" is an array (list, tuple, sequence) of years with 27 pay periods.
+    "yearArray" is an array (list, tuple, sequence) of years with 27 pay periods.
     """
 
     initYear = initial.year
