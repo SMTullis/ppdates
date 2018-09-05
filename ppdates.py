@@ -65,3 +65,8 @@ def ppStart(yearStart, pp, yearArray):
         return None
 
     return yearStart + datetime.timedelta(days = (pp - 1) * 14)
+
+def ppNumber(yearStart, ppStart):
+    """ppNumber returns the number of a pay period given the start date."""
+
+    return ((ppStart.toordinal() - yearStart.toordinal()) // 14) + 1
