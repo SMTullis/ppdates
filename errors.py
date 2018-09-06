@@ -1,4 +1,9 @@
-class PayPeriodError(Exception):
+class RangeError(Exception):
+
+    def __init__(self):
+        pass
+
+class PayPeriodError(RangeError):
     """PayPeriodError is returned any time that the pay period number exceeds
     the number of pay periods in a given year.
     """
@@ -9,7 +14,7 @@ class PayPeriodError(Exception):
     def __str__(self):
         return repr(self.error)
 
-class YearUnknownError(Exception):
+class YearUnknownError(RangeError):
     """YearUnknownError is raised whenever data about a year is requested and
     it is not found in the year list.
     """
