@@ -24,6 +24,7 @@ At the end of the 56th year, the cycle resets and begins anew.
 """
 
 import datetime
+import errors
 
 INITDATE = datetime.date(1901, 1, 13)
 
@@ -61,8 +62,7 @@ def calcPPStartDate(yearStartDate, payPeriod, yearArray = YEARSWITH27PPS):
 
     if payPeriod > 27 \
         or (payPeriod > 26 and yearStartDate.year not in yearArray):
-        # Change to raise PayPeriodError
-        return None
+        raise PayPeriodError
 
     return yearStartDate + datetime.timedelta(days = (payPeriod - 1) * 14)
 
