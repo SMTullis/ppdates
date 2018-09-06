@@ -31,7 +31,7 @@ YEARSWITH27PPS = (1911, 1922, 1933, 1944, 1956,
             1967, 1978, 1989, 2000, 2012,
             2023, 2034, 2045, 2056, 2067)
 
-def yearStartDate(initialDate, targetYear, yearArray):
+def yearStartDate(initialDate, targetYear, yearArray = YEARSWITH27PPS):
     """yearStartDate() calculates the first day of the first pay period of a target
     pay year.
 
@@ -54,7 +54,7 @@ def yearStartDate(initialDate, targetYear, yearArray):
 
     return initialDate + datetime.timedelta(days = daysToAdd)
 
-def ppStartDate(yearStartDate, payPeriod, yearArray):
+def ppStartDate(yearStartDate, payPeriod, yearArray=YEARSWITH27PPS):
     """Using the first day of the first pay period of a pay year as a staring
     point, this function returns the start date of the target pay period.
     """
