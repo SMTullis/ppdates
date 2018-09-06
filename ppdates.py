@@ -36,12 +36,13 @@ def calcYearStartDate(targetYear, initialDate = INITDATE, yearArray = YEARSWITH2
     """yearStartDate() calculates the first day of the first pay period of a target
     pay year.
 
-    "initial" must be a datetime.date corrlating to the first day of the first
-    pay period of a known year. The initDate global constant is recommended.
+    "initialDate" must be a datetime.date corrlating to the first day of the first
+    pay period of a known year. The INITDATE global variable is the default.
 
-    "target" is the target year as an integer.
+    "targetYear" is the target year as an integer.
 
     "yearArray" is an array (list, tuple, sequence) of years with 27 pay periods.
+    YEARSWITH27PPS is the default.
     """
 
     if targetYear > max(yearArray) + 10:
