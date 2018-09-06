@@ -49,6 +49,12 @@ def calcYearStartDate(targetYear, initialDate = INITDATE, yearArray = YEARSWITH2
             "{year} is not available.".format(year = targetYear)
         )
 
+    # To reduce the number of loop iterations below, update the initialDate
+    # by the number of days in the 56-year cycle for the number of cycles that
+    # have transpired. Using floor division to divide the year difference by
+    # 56 provides the number of complete, transpired cycles.
+    initialDate += datetime.timedelta(days = ((targetYear - initialDate.year) // 56) * 20454)
+
     initYear = initialDate.year
     diff = targetYear - initYear
     daysToAdd = 0
