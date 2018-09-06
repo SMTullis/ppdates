@@ -34,7 +34,7 @@ YEARSWITH27PPS = (1911, 1922, 1933, 1944, 1956,
                   2079, 2090, 2101, 2112, 2124)
 
 def calcYearStartDate(targetYear, initialDate = INITDATE, yearArray = YEARSWITH27PPS):
-    """yearStartDate() calculates the first day of the first pay period of a target
+    """calcYearStartDate() calculates the first day of the first pay period of a target
     pay year.
 
     "initialDate" must be a datetime.date corrlating to the first day of the first
@@ -87,7 +87,7 @@ def calcPPStartDate(yearStartDate, payPeriod, yearArray = YEARSWITH27PPS):
     return yearStartDate + datetime.timedelta(days = (payPeriod - 1) * 14)
 
 def calcPPNumber(yearStartDate, ppStartDate, yearArray = YEARSWITH27PPS):
-    """ppNumber returns the number of a pay period given the start date. To
+    """calcPPNumber returns the number of a pay period given the start date. To
     accomplish this, we determine the number of days between the dates and
     divide by the number of days in each pay period, 14. Moreover, using floor
     division ensures that we return the integer value.
