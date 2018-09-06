@@ -67,6 +67,10 @@ def ppStartDate(yearStartDate, payPeriod, yearArray=YEARSWITH27PPS):
     return yearStartDate + datetime.timedelta(days = (payPeriod - 1) * 14)
 
 def ppNumber(yearStartDate, ppStartDate):
-    """ppNumber returns the number of a pay period given the start date."""
+    """ppNumber returns the number of a pay period given the start date. To
+    accomplish this, we determine the number of days between the dates and
+    divide by the number of days in each pay period, 14. Moreover, using floor
+    division ensures that we return the integer value.
+    """
 
     return ((ppStartDate.toordinal() - yearStartDate.toordinal()) // 14) + 1
