@@ -66,13 +66,13 @@ def calcPPStartDate(yearStartDate, payPeriod, yearArray = YEARSWITH27PPS):
     """
 
     if yearStartDate.year in yearArray:
-        totPP = 27
-    else: totPP = 26
+        payPeriodsInYear = 27
+    else: payPeriodsInYear = 26
 
-    if payPeriod > totPP:
+    if payPeriod > payPeriodsInYear:
         raise errors.PayPeriodError(
             "{year} only has {pp} pay periods.".format(
-            year = yearStartDate.year, pp = totPP
+            year = yearStartDate.year, pp = payPeriodsInYear
             )
         )
 
@@ -88,10 +88,10 @@ def calcPPNumber(yearStartDate, ppStartDate, yearArray = YEARSWITH27PPS):
     payPeriodNo = ((ppStartDate.toordinal() - yearStartDate.toordinal()) // 14) + 1
 
     if yearStartDate.year in yearArray:
-        totPP = 27
-    else: totPP = 26
+        payPeriodsInYear = 27
+    else: payPeriodsInYear = 26
 
-    if payPeriodNo > totPP:
+    if payPeriodNo > payPeriodsInYear:
         raise errors.PayPeriodError(
             "Target pay period is not in the given pay year."
         )
