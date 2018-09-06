@@ -1,7 +1,5 @@
 class RangeError(Exception):
-
-    def __init__(self):
-        pass
+    pass
 
 class PayPeriodError(RangeError):
     """PayPeriodError is returned any time that the pay period number exceeds
