@@ -27,13 +27,12 @@ import datetime
 
 INITDATE = datetime.date(1901, 1, 13)
 
-""" A tuple of years with 27 pay periods"""
-YEAR27PPS = (1911, 1922, 1933, 1944, 1956,
+YEARSWITH27PPS = (1911, 1922, 1933, 1944, 1956,
             1967, 1978, 1989, 2000, 2012,
             2023, 2034, 2045, 2056, 2067)
 
-def yearStart(initial, target, yearArray):
-    """yearStart() calculates the first day of the first pay period of a target
+def yearStartDate(initialDate, targetYear, yearArray):
+    """yearStartDate() calculates the first day of the first pay period of a target
     pay year.
 
     "initial" must be a datetime.date corrlating to the first day of the first
@@ -44,8 +43,8 @@ def yearStart(initial, target, yearArray):
     "yearArray" is an array (list, tuple, sequence) of years with 27 pay periods.
     """
 
-    initYear = initial.year
-    diff = target - initYear
+    initYear = initialDate.year
+    diff = targetYear - initYear
     daysToAdd = 0
 
     for yr in range(diff):
@@ -53,20 +52,21 @@ def yearStart(initial, target, yearArray):
             daysToAdd += 14 * 27
         else: daysToAdd += 14 * 26
 
-    return initial + datetime.timedelta(days = daysToAdd)
+    return initialDate + datetime.timedelta(days = daysToAdd)
 
-def ppStart(yearStart, pp, yearArray):
+def ppStartDate(yearStartDate, payPeriod, yearArray):
     """Using the first day of the first pay period of a pay year as a staring
     point, this function returns the start date of the target pay period.
     """
 
-    if pp > 27 or (pp > 26 and yearStart.year not in yearArray):
+    if payPeriod > 27 \
+        or (payPeriod > 26 and yearStartDate.year not in yearArray):
         # Change to raise PayPeriodError
         return None
 
-    return yearStart + datetime.timedelta(days = (pp - 1) * 14)
+    return yearStartDate + datetime.timedelta(days = (payPeriod - 1) * 14)
 
-def ppNumber(yearStart, ppStart):
+def ppNumber(yearStartDate, ppStartDate):
     """ppNumber returns the number of a pay period given the start date."""
 
-    return ((ppStart.toordinal() - yearStart.toordinal()) // 14) + 1
+    return ((ppStartDate.toordinal() - yearStartDate.toordinal()) // 14) + 1
