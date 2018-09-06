@@ -105,3 +105,20 @@ def calcPPNumber(yearStartDate, ppStartDate, yearArray = YEARSWITH27PPS):
         )
 
     return payPeriodNo
+
+def findPPInfo(targetDate, initialDate = INITDATE, yearArray = YEARSWITH27PPS):
+    """findPPInfo returns the pay year, pay period number, and pay period start
+    date applicable to the target date.
+    """
+
+    proposedDate = calcYearStartDate(targetDate.year, initialDate = initialDate,
+                                    yearArray = yearArray)
+
+    if targetDate < proposedDate:
+        proposedDate = calcYearStartDate(targetDate.year - 1, initialDate = initialDate,
+                                        yearArray = yearArray)
+
+    payPeriodNo = calcPPNumber(proposedDate, targetDate, yearArray = yearArray)
+    payPeriodDate = calcPPStartDate(proposedDate, payPeriodNo, yearArray = yearArray)
+
+    return proposedDate.year, payPeriodNo, payPeriodDate
