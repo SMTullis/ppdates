@@ -99,7 +99,7 @@ def calcPPNumber(yearStartDate, ppStartDate, yearArray = YEARSWITH27PPS):
         payPeriodsInYear = 27
     else: payPeriodsInYear = 26
 
-    if payPeriodNo > payPeriodsInYear:
+    if payPeriodNo > payPeriodsInYear or payPeriodNo < 1:
         raise errors.PayPeriodError(
             "Target pay period is not in the given pay year."
         )
