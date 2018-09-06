@@ -46,7 +46,7 @@ def calcYearStartDate(targetYear, initialDate = INITDATE, yearArray = YEARSWITH2
     YEARSWITH27PPS is the default.
     """
 
-    if targetYear > max(yearArray) + 10:
+    if targetYear > max(yearArray) + 10 or targetYear < min(yearArray) - 10:
         raise errors.YearUnkownError(
             "{year} is not available.".format(year = targetYear)
         )
