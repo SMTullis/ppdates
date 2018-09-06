@@ -60,9 +60,16 @@ def calcPPStartDate(yearStartDate, payPeriod, yearArray = YEARSWITH27PPS):
     point, this function returns the start date of the target pay period.
     """
 
-    if payPeriod > 27 \
-        or (payPeriod > 26 and yearStartDate.year not in yearArray):
-        raise PayPeriodError
+    if yearStartDate.year in yearArray:
+        totPP = 27
+    else: totPP = 26
+
+    if payPeriod > totPP:
+        raise errors.PayPeriodError(
+            "{year} only has {pp} pay periods.".format(
+            year = yearStartDate.year, pp = totPP
+            )
+        )
 
     return yearStartDate + datetime.timedelta(days = (payPeriod - 1) * 14)
 
