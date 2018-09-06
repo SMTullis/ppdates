@@ -54,7 +54,7 @@ def yearStartDate(initialDate, targetYear, yearArray = YEARSWITH27PPS):
 
     return initialDate + datetime.timedelta(days = daysToAdd)
 
-def ppStartDate(yearStartDate, payPeriod, yearArray=YEARSWITH27PPS):
+def ppStartDate(yearStartDate, payPeriod, yearArray = YEARSWITH27PPS):
     """Using the first day of the first pay period of a pay year as a staring
     point, this function returns the start date of the target pay period.
     """
