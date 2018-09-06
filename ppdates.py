@@ -44,6 +44,11 @@ def calcYearStartDate(targetYear, initialDate = INITDATE, yearArray = YEARSWITH2
     "yearArray" is an array (list, tuple, sequence) of years with 27 pay periods.
     """
 
+    if targetYear > max(yearArray) + 10:
+        raise errors.YearUnkownError(
+            "{year} is not available.".format(year = targetYear)
+        )
+
     initYear = initialDate.year
     diff = targetYear - initYear
     daysToAdd = 0
