@@ -30,7 +30,8 @@ INITDATE = datetime.date(1901, 1, 13)
 
 YEARSWITH27PPS = (1911, 1922, 1933, 1944, 1956,
                   1967, 1978, 1989, 2000, 2012,
-                  2023, 2034, 2045, 2056, 2067)
+                  2023, 2034, 2045, 2056, 2068,
+                  2079, 2090, 2101, 2112, 2124)
 
 def calcYearStartDate(targetYear, initialDate = INITDATE, yearArray = YEARSWITH27PPS):
     """yearStartDate() calculates the first day of the first pay period of a target
