@@ -48,7 +48,7 @@ class PayCalendar:
         return true
 
     def calcDaysToAdd(year):
-        daysToAdd = calcTranspiredDays(year)
+        daysToAdd = calcDaysInCompletedCycles(year)
         startDate = self.initialDate + datetime.timedelta(days = daysToAdd)
         initYear = startDate.year
         diff = year - initYear
@@ -60,7 +60,7 @@ class PayCalendar:
 
         return daysToAdd
 
-    def calcTranspiredDays(year):
+    def calcDaysInCompletedCycles(year):
         # To reduce the number of loop iterations below, update the initialDate
         # by the number of days in the 56-year cycle for the number of cycles that
         # have transpired. Using floor division to divide the year difference by
@@ -79,21 +79,25 @@ class PayCalendar:
 
         return self.initialDate + datetime.timedelta(days = calcDaysToAdd(year))
 
+    def checkPPInRange(year, payPeriodNo):
+        if 1 <= payPeriodNo <= calcPayPeriodsInYear(yearStartDate.year) :
+            return true
+
+        return false
+
     def calcPPStartDate(yearStartDate, payPeriodNo):
         """Using the first day of the first pay period of a pay year as a staring
         point, this function returns the start date of the target pay period.
         """
 
-        payPeriodsInYear = calcPayPeriodsInYear(yearStartDate.year)
-
-        if payPeriodNo > payPeriodsInYear:
+        if not checkPPInRange(yearStartDate.year, payPeriodNo):
             raise errors.PayPeriodError(
                 "{year} only has {pp} pay periods.".format(
-                year = yearStartDate.year, pp = payPeriodsInYear
+                    year = yearStartDate.year, pp = payPeriodsInYear
                 )
             )
 
-        return yearStartDate + datetime.timedelta(days = (payPeriod - 1) * 14)
+        return yearStartDate + datetime.timedelta(days = (payPeriodNo - 1) * 14)
 
     def calcPPNumber(yearStartDate, targetDate):
         """calcPPNumber returns the number of a pay period given the start date. To
