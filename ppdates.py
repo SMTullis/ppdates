@@ -80,7 +80,7 @@ class PayCalendar:
         return self.initialDate + datetime.timedelta(days = calcDaysToAdd(year))
 
     def checkPPInRange(year, payPeriodNo):
-        if 1 <= payPeriodNo <= calcPayPeriodsInYear(yearStartDate.year) :
+        if 1 <= payPeriodNo <= calcPayPeriodsInYear(year) :
             return true
 
         return false
@@ -105,12 +105,9 @@ class PayCalendar:
         divide by the number of days in each pay period, 14. Moreover, using floor
         division ensures that we return the integer value.
         """
-
         payPeriodNo = ((targetDate.toordinal() - yearStartDate.toordinal()) // 14) + 1
 
-        payPeriodsInYear = calcPayPeriodsInYear(yearStartDate.year)
-
-        if payPeriodNo > payPeriodsInYear or payPeriodNo < 1:
+        if not checkPPInRange(yearStartDate.year, payPeriodNo):
             raise errors.PayPeriodError(
                 "Target pay period is not in the given pay year."
             )
