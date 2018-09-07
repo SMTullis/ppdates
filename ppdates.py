@@ -60,7 +60,7 @@ class PayCalendar:
         self.initialDate += datetime.timedelta(days = ((targetYear - self.initialDate.year) // 56) * 20454)
 
         initYear = self.initialDate.year
-        diff = targetYear - initYear
+        diff = yearsSinceInitialDate(targetYear)
         daysToAdd = 0
 
         for yr in range(diff):
@@ -125,3 +125,6 @@ class PayCalendar:
         else: payPeriodsInYear = 26
 
         return payPeriodsInYear
+
+    def yearsSinceInitialDate(targetYear):
+        return targetYear - self.initialDate.year
