@@ -48,7 +48,7 @@ class PayCalendar:
         return true
 
     def calcDaysToAdd(self, year):
-        daysToAdd = calcDaysInCompletedCycles(year)
+        daysToAdd = self.calcDaysInCompletedCycles(year)
         startDate = self.initialDate + datetime.timedelta(days = daysToAdd)
         initYear = startDate.year
         diff = year - initYear
@@ -72,15 +72,15 @@ class PayCalendar:
         of a target pay year.
         """
 
-        if not checkYearInRange(year):
+        if not self.checkYearInRange(year):
             raise errors.YearUnkownError(
                 "{} is not available.".format(year)
             )
 
-        return self.initialDate + datetime.timedelta(days = calcDaysToAdd(year))
+        return self.initialDate + datetime.timedelta(days = self.calcDaysToAdd(year))
 
     def checkPPInRange(self, year, payPeriodNo):
-        if 1 <= payPeriodNo <= calcPayPeriodsInYear(year) :
+        if 1 <= payPeriodNo <= self.calcPayPeriodsInYear(year) :
             return true
 
         return false
@@ -90,7 +90,7 @@ class PayCalendar:
         point, this function returns the start date of the target pay period.
         """
 
-        if not checkPPInRange(yearStartDate.year, payPeriodNo):
+        if not self.checkPPInRange(yearStartDate.year, payPeriodNo):
             raise errors.PayPeriodError(
                 "{year} only has {pp} pay periods.".format(
                     year = yearStartDate.year, pp = payPeriodsInYear
@@ -107,7 +107,7 @@ class PayCalendar:
         """
         payPeriodNo = ((targetDate.toordinal() - yearStartDate.toordinal()) // 14) + 1
 
-        if not checkPPInRange(yearStartDate.year, payPeriodNo):
+        if not self.checkPPInRange(yearStartDate.year, payPeriodNo):
             raise errors.PayPeriodError(
                 "Target pay period is not in the given pay year."
             )
@@ -119,13 +119,13 @@ class PayCalendar:
         date applicable to the target date.
         """
 
-        proposedDate = calcYearStartDate(targetDate.year)
+        proposedDate = self.calcYearStartDate(targetDate.year)
 
         if targetDate < proposedDate:
-            proposedDate = calcYearStartDate(targetDate.year - 1)
+            proposedDate = self.calcYearStartDate(targetDate.year - 1)
 
-        payPeriodNo = calcPPNumber(proposedDate, targetDate)
-        payPeriodDate = calcPPStartDate(proposedDate, payPeriodNo)
+        payPeriodNo = self.calcPPNumber(proposedDate, targetDate)
+        payPeriodDate = self.calcPPStartDate(proposedDate, payPeriodNo)
 
         return proposedDate.year, payPeriodNo, payPeriodDate
 
