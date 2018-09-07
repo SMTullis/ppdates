@@ -76,9 +76,7 @@ class PayCalendar:
         payPeriodNo = ((targetDate.toordinal() - yearStartDate.toordinal()) // 14) + 1
 
         if not self.checkPPInRange(yearStartDate.year, payPeriodNo):
-            raise errors.PayPeriodError(
-                "Target pay period is not in the given pay year."
-            )
+            raise errors.PayPeriodError
 
         return payPeriodNo
 
@@ -88,11 +86,7 @@ class PayCalendar:
         """
 
         if not self.checkPPInRange(yearStartDate.year, payPeriodNo):
-            raise errors.PayPeriodError(
-                "{year} only has {pp} pay periods.".format(
-                    year = yearStartDate.year, pp = payPeriodsInYear
-                )
-            )
+            raise errors.PayPeriodError
 
         return yearStartDate + datetime.timedelta(days = (payPeriodNo - 1) * 14)
 
@@ -105,9 +99,7 @@ class PayCalendar:
         """
 
         if not self.checkYearInRange(year):
-            raise errors.YearUnkownError(
-                "{} is not available.".format(year)
-            )
+            raise errors.YearUnknownError(year)
 
         return self.initialDate + datetime.timedelta(days = self.calcDaysToAdd(year))
 

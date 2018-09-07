@@ -6,19 +6,24 @@ class PayPeriodError(RangeError):
     the number of pay periods in a given year.
     """
 
-    def __init__(self, error):
-        self.error = error
+    errorText = "Target pay period is not in the given pay year."
+
+    def __init__(self):
+        pass
 
     def __str__(self):
-        return repr(self.error)
+        return repr(self.errorText)
 
 class YearUnknownError(RangeError):
     """YearUnknownError is raised whenever data about a year is requested and
     it is not found in the year list.
     """
 
-    def __init__(self, error):
-        self.error = error
+    error = "{} is not available."
+    year = 0
+
+    def __init__(self, year):
+        self.year = year
 
     def __str__(self):
-        return repr(self.error)
+        return repr(self.error.format(self.year))
