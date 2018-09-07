@@ -47,34 +47,37 @@ class PayCalendar:
 
         return true
 
-    def calcYearStartDate(targetYear):
-        """calcYearStartDate() calculates the first day of the first pay period
-        of a target pay year.
-
-        "targetYear" is the target year as an integer.
-        """
-
-        if not checkYearInRange(targetYear):
-            raise errors.YearUnkownError(
-                "{year} is not available.".format(year = targetYear)
-            )
-
-        # To reduce the number of loop iterations below, update the initialDate
-        # by the number of days in the 56-year cycle for the number of cycles that
-        # have transpired. Using floor division to divide the year difference by
-        # 56 provides the number of complete, transpired cycles.
-        self.initialDate += datetime.timedelta(days = ((targetYear - self.initialDate.year) // 56) * 20454)
-
-        initYear = self.initialDate.year
-        diff = yearsSinceInitialDate(targetYear)
-        daysToAdd = 0
+    def calcDaysToAdd(year):
+        daysToAdd = calcTranspiredDays(year)
+        startDate = self.initialDate + datetime.timedelta(days = daysToAdd)
+        initYear = startDate.year
+        diff = year - initYear
 
         for yr in range(diff):
             if (initYear + yr) in self.yearList:
                 daysToAdd += 14 * 27
             else: daysToAdd += 14 * 26
 
-        return self.initialDate + datetime.timedelta(days = daysToAdd)
+        return daysToAdd
+
+    def calcTranspiredDays(year):
+        # To reduce the number of loop iterations below, update the initialDate
+        # by the number of days in the 56-year cycle for the number of cycles that
+        # have transpired. Using floor division to divide the year difference by
+        # 56 provides the number of complete, transpired cycles.
+        return ((year - self.initialDate.year) // 56) * 20454
+
+    def calcYearStartDate(year):
+        """calcYearStartDate() calculates the first day of the first pay period
+        of a target pay year.
+        """
+
+        if not checkYearInRange(year):
+            raise errors.YearUnkownError(
+                "{} is not available.".format(year)
+            )
+
+        return self.initialDate + datetime.timedelta(days = calcDaysToAdd(year))
 
     def calcPPStartDate(yearStartDate, payPeriodNo):
         """Using the first day of the first pay period of a pay year as a staring
