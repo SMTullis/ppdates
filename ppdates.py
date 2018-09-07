@@ -110,10 +110,10 @@ class PayCalendar:
         return False
 
     def checkYearInRange(self, year):
-        if year > max(self.yearList) + 10 or year < min(self.yearList) - 10:
-            return False
+        if min(self.yearList) - 10 <= year <= max(self.yearList) + 10:
+            return True
 
-        return True
+        return False
 
     def findPPInfo(self, targetDate):
         """findPPInfo returns the pay year, pay period number, and pay period start
