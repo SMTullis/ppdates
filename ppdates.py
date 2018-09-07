@@ -41,13 +41,13 @@ class PayCalendar:
         self.initialDate = initialDate
         self.yearList = yearList
 
-    def checkYearInRange(year):
+    def checkYearInRange(self, year):
         if year > max(self.yearList) + 10 or year < min(self.yearList) - 10:
             return false
 
         return true
 
-    def calcDaysToAdd(year):
+    def calcDaysToAdd(self, year):
         daysToAdd = calcDaysInCompletedCycles(year)
         startDate = self.initialDate + datetime.timedelta(days = daysToAdd)
         initYear = startDate.year
@@ -60,14 +60,14 @@ class PayCalendar:
 
         return daysToAdd
 
-    def calcDaysInCompletedCycles(year):
+    def calcDaysInCompletedCycles(self, year):
         # To reduce the number of loop iterations below, update the initialDate
         # by the number of days in the 56-year cycle for the number of cycles that
         # have transpired. Using floor division to divide the year difference by
         # 56 provides the number of complete, transpired cycles.
         return ((year - self.initialDate.year) // 56) * 20454
 
-    def calcYearStartDate(year):
+    def calcYearStartDate(self, year):
         """calcYearStartDate() calculates the first day of the first pay period
         of a target pay year.
         """
@@ -79,13 +79,13 @@ class PayCalendar:
 
         return self.initialDate + datetime.timedelta(days = calcDaysToAdd(year))
 
-    def checkPPInRange(year, payPeriodNo):
+    def checkPPInRange(self, year, payPeriodNo):
         if 1 <= payPeriodNo <= calcPayPeriodsInYear(year) :
             return true
 
         return false
 
-    def calcPPStartDate(yearStartDate, payPeriodNo):
+    def calcPPStartDate(self, yearStartDate, payPeriodNo):
         """Using the first day of the first pay period of a pay year as a staring
         point, this function returns the start date of the target pay period.
         """
@@ -99,7 +99,7 @@ class PayCalendar:
 
         return yearStartDate + datetime.timedelta(days = (payPeriodNo - 1) * 14)
 
-    def calcPPNumber(yearStartDate, targetDate):
+    def calcPPNumber(self, yearStartDate, targetDate):
         """calcPPNumber returns the number of a pay period given the start date. To
         accomplish this, we determine the number of days between the dates and
         divide by the number of days in each pay period, 14. Moreover, using floor
@@ -114,7 +114,7 @@ class PayCalendar:
 
         return payPeriodNo
 
-    def findPPInfo(targetDate):
+    def findPPInfo(self, targetDate):
         """findPPInfo returns the pay year, pay period number, and pay period start
         date applicable to the target date.
         """
@@ -129,12 +129,12 @@ class PayCalendar:
 
         return proposedDate.year, payPeriodNo, payPeriodDate
 
-    def calcPayPeriodsInYear(year):
+    def calcPayPeriodsInYear(self, year):
         if year in self.yearList:
             payPeriodsInYear = 27
         else: payPeriodsInYear = 26
 
         return payPeriodsInYear
 
-    def yearsSinceInitialDate(targetYear):
+    def yearsSinceInitialDate(self, targetYear):
         return targetYear - self.initialDate.year
