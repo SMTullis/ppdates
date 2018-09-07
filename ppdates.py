@@ -41,7 +41,6 @@ class PayCalendar:
         self.initialDate = initialDate
         self.yearList = yearList
 
-
     def calcYearStartDate(targetYear):
         """calcYearStartDate() calculates the first day of the first pay period
         of a target pay year.
@@ -49,7 +48,7 @@ class PayCalendar:
         "targetYear" is the target year as an integer.
         """
 
-        if targetYear > max(self.yearArray) + 10 or targetYear < min(self.yearArray) - 10:
+        if targetYear > max(self.yearList) + 10 or targetYear < min(self.yearList) - 10:
             raise errors.YearUnkownError(
                 "{year} is not available.".format(year = targetYear)
             )
@@ -65,7 +64,7 @@ class PayCalendar:
         daysToAdd = 0
 
         for yr in range(diff):
-            if (initYear + yr) in yearArray:
+            if (initYear + yr) in self.yearList:
                 daysToAdd += 14 * 27
             else: daysToAdd += 14 * 26
 
@@ -76,9 +75,7 @@ class PayCalendar:
         point, this function returns the start date of the target pay period.
         """
 
-        if yearStartDate.year in self.yearArray:
-            payPeriodsInYear = 27
-        else: payPeriodsInYear = 26
+        payPeriodsInYear = calcPayPeriodsInYear(yearStartDate.year)
 
         if payPeriodNo > payPeriodsInYear:
             raise errors.PayPeriodError(
@@ -98,9 +95,7 @@ class PayCalendar:
 
         payPeriodNo = ((targetDate.toordinal() - yearStartDate.toordinal()) // 14) + 1
 
-        if yearStartDate.year in self.yearArray:
-            payPeriodsInYear = 27
-        else: payPeriodsInYear = 26
+        payPeriodsInYear = calcPayPeriodsInYear(yearStartDate.year)
 
         if payPeriodNo > payPeriodsInYear or payPeriodNo < 1:
             raise errors.PayPeriodError(
@@ -123,3 +118,10 @@ class PayCalendar:
         payPeriodDate = calcPPStartDate(proposedDate, payPeriodNo)
 
         return proposedDate.year, payPeriodNo, payPeriodDate
+
+    def calcPayPeriodsInYear(year):
+        if year in self.yearList:
+            payPeriodsInYear = 27
+        else: payPeriodsInYear = 26
+
+        return payPeriodsInYear
