@@ -41,6 +41,12 @@ class PayCalendar:
         self.initialDate = initialDate
         self.yearList = yearList
 
+    def checkYearInRange(year):
+        if year > max(self.yearList) + 10 or year < min(self.yearList) - 10:
+            return false
+
+        return true
+
     def calcYearStartDate(targetYear):
         """calcYearStartDate() calculates the first day of the first pay period
         of a target pay year.
@@ -48,7 +54,7 @@ class PayCalendar:
         "targetYear" is the target year as an integer.
         """
 
-        if targetYear > max(self.yearList) + 10 or targetYear < min(self.yearList) - 10:
+        if not checkYearInRange(targetYear):
             raise errors.YearUnkownError(
                 "{year} is not available.".format(year = targetYear)
             )
