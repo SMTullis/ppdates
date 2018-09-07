@@ -12,7 +12,7 @@ class PayPeriodError(RangeError):
         pass
 
     def __str__(self):
-        return repr(self.errorText)
+        return self.errorText
 
 class YearUnknownError(RangeError):
     """YearUnknownError is raised whenever data about a year is requested and
@@ -26,4 +26,4 @@ class YearUnknownError(RangeError):
         self.year = year
 
     def __str__(self):
-        return repr(self.error.format(self.year))
+        return self.error.format(self.year)
