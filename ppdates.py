@@ -43,9 +43,9 @@ class PayCalendar:
 
     def checkYearInRange(self, year):
         if year > max(self.yearList) + 10 or year < min(self.yearList) - 10:
-            return false
+            return False
 
-        return true
+        return True
 
     def calcDaysToAdd(self, year):
         daysToAdd = self.calcDaysInCompletedCycles(year)
@@ -81,9 +81,9 @@ class PayCalendar:
 
     def checkPPInRange(self, year, payPeriodNo):
         if 1 <= payPeriodNo <= self.calcPayPeriodsInYear(year) :
-            return true
+            return True
 
-        return false
+        return False
 
     def calcPPStartDate(self, yearStartDate, payPeriodNo):
         """Using the first day of the first pay period of a pay year as a staring
