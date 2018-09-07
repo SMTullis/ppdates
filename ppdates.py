@@ -29,96 +29,97 @@ import errors
 INITDATE = datetime.date(1901, 1, 13)
 
 YEARSWITH27PPS = (1911, 1922, 1933, 1944, 1956,
-                  1967, 1978, 1989, 2000, 2012,
-                  2023, 2034, 2045, 2056, 2068,
-                  2079, 2090, 2101, 2112, 2124)
+                                1967, 1978, 1989, 2000, 2012,
+                                2023, 2034, 2045, 2056, 2068,
+                                2079, 2090, 2101, 2112, 2124)
 
-def calcYearStartDate(targetYear, initialDate = INITDATE, yearArray = YEARSWITH27PPS):
-    """calcYearStartDate() calculates the first day of the first pay period of a target
-    pay year.
+class PayCalendar:
+    initialDate = None
+    yearList = ()
 
-    "initialDate" must be a datetime.date corrlating to the first day of the first
-    pay period of a known year. The INITDATE global variable is the default.
+    def __init__(self, initialDate, yearList):
+        self.initialDate = initialDate
+        self.yearList = yearList
 
-    "targetYear" is the target year as an integer.
 
-    "yearArray" is an array (list, tuple, sequence) of years with 27 pay periods.
-    YEARSWITH27PPS is the default.
-    """
+    def calcYearStartDate(targetYear):
+        """calcYearStartDate() calculates the first day of the first pay period
+        of a target pay year.
 
-    if targetYear > max(yearArray) + 10 or targetYear < min(yearArray) - 10:
-        raise errors.YearUnkownError(
-            "{year} is not available.".format(year = targetYear)
-        )
+        "targetYear" is the target year as an integer.
+        """
 
-    # To reduce the number of loop iterations below, update the initialDate
-    # by the number of days in the 56-year cycle for the number of cycles that
-    # have transpired. Using floor division to divide the year difference by
-    # 56 provides the number of complete, transpired cycles.
-    initialDate += datetime.timedelta(days = ((targetYear - initialDate.year) // 56) * 20454)
-
-    initYear = initialDate.year
-    diff = targetYear - initYear
-    daysToAdd = 0
-
-    for yr in range(diff):
-        if (initYear + yr) in yearArray:
-            daysToAdd += 14 * 27
-        else: daysToAdd += 14 * 26
-
-    return initialDate + datetime.timedelta(days = daysToAdd)
-
-def calcPPStartDate(yearStartDate, payPeriodNo, yearArray = YEARSWITH27PPS):
-    """Using the first day of the first pay period of a pay year as a staring
-    point, this function returns the start date of the target pay period.
-    """
-
-    if yearStartDate.year in yearArray:
-        payPeriodsInYear = 27
-    else: payPeriodsInYear = 26
-
-    if payPeriodNo > payPeriodsInYear:
-        raise errors.PayPeriodError(
-            "{year} only has {pp} pay periods.".format(
-            year = yearStartDate.year, pp = payPeriodsInYear
+        if targetYear > max(self.yearArray) + 10 or targetYear < min(self.yearArray) - 10:
+            raise errors.YearUnkownError(
+                "{year} is not available.".format(year = targetYear)
             )
-        )
 
-    return yearStartDate + datetime.timedelta(days = (payPeriod - 1) * 14)
+        # To reduce the number of loop iterations below, update the initialDate
+        # by the number of days in the 56-year cycle for the number of cycles that
+        # have transpired. Using floor division to divide the year difference by
+        # 56 provides the number of complete, transpired cycles.
+        self.initialDate += datetime.timedelta(days = ((targetYear - self.initialDate.year) // 56) * 20454)
 
-def calcPPNumber(yearStartDate, targetDate, yearArray = YEARSWITH27PPS):
-    """calcPPNumber returns the number of a pay period given the start date. To
-    accomplish this, we determine the number of days between the dates and
-    divide by the number of days in each pay period, 14. Moreover, using floor
-    division ensures that we return the integer value.
-    """
+        initYear = self.initialDate.year
+        diff = targetYear - initYear
+        daysToAdd = 0
 
-    payPeriodNo = ((targetDate.toordinal() - yearStartDate.toordinal()) // 14) + 1
+        for yr in range(diff):
+            if (initYear + yr) in yearArray:
+                daysToAdd += 14 * 27
+            else: daysToAdd += 14 * 26
 
-    if yearStartDate.year in yearArray:
-        payPeriodsInYear = 27
-    else: payPeriodsInYear = 26
+        return self.initialDate + datetime.timedelta(days = daysToAdd)
 
-    if payPeriodNo > payPeriodsInYear or payPeriodNo < 1:
-        raise errors.PayPeriodError(
-            "Target pay period is not in the given pay year."
-        )
+    def calcPPStartDate(yearStartDate, payPeriodNo):
+        """Using the first day of the first pay period of a pay year as a staring
+        point, this function returns the start date of the target pay period.
+        """
 
-    return payPeriodNo
+        if yearStartDate.year in self.yearArray:
+            payPeriodsInYear = 27
+        else: payPeriodsInYear = 26
 
-def findPPInfo(targetDate, initialDate = INITDATE, yearArray = YEARSWITH27PPS):
-    """findPPInfo returns the pay year, pay period number, and pay period start
-    date applicable to the target date.
-    """
+        if payPeriodNo > payPeriodsInYear:
+            raise errors.PayPeriodError(
+                "{year} only has {pp} pay periods.".format(
+                year = yearStartDate.year, pp = payPeriodsInYear
+                )
+            )
 
-    proposedDate = calcYearStartDate(targetDate.year, initialDate = initialDate,
-                                    yearArray = yearArray)
+        return yearStartDate + datetime.timedelta(days = (payPeriod - 1) * 14)
 
-    if targetDate < proposedDate:
-        proposedDate = calcYearStartDate(targetDate.year - 1, initialDate = initialDate,
-                                        yearArray = yearArray)
+    def calcPPNumber(yearStartDate, targetDate):
+        """calcPPNumber returns the number of a pay period given the start date. To
+        accomplish this, we determine the number of days between the dates and
+        divide by the number of days in each pay period, 14. Moreover, using floor
+        division ensures that we return the integer value.
+        """
 
-    payPeriodNo = calcPPNumber(proposedDate, targetDate, yearArray = yearArray)
-    payPeriodDate = calcPPStartDate(proposedDate, payPeriodNo, yearArray = yearArray)
+        payPeriodNo = ((targetDate.toordinal() - yearStartDate.toordinal()) // 14) + 1
 
-    return proposedDate.year, payPeriodNo, payPeriodDate
+        if yearStartDate.year in self.yearArray:
+            payPeriodsInYear = 27
+        else: payPeriodsInYear = 26
+
+        if payPeriodNo > payPeriodsInYear or payPeriodNo < 1:
+            raise errors.PayPeriodError(
+                "Target pay period is not in the given pay year."
+            )
+
+        return payPeriodNo
+
+    def findPPInfo(targetDate):
+        """findPPInfo returns the pay year, pay period number, and pay period start
+        date applicable to the target date.
+        """
+
+        proposedDate = calcYearStartDate(targetDate.year)
+
+        if targetDate < proposedDate:
+            proposedDate = calcYearStartDate(targetDate.year - 1)
+
+        payPeriodNo = calcPPNumber(proposedDate, targetDate)
+        payPeriodDate = calcPPStartDate(proposedDate, payPeriodNo)
+
+        return proposedDate.year, payPeriodNo, payPeriodDate
