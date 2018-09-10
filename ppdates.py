@@ -102,14 +102,3 @@ class PayCalendar:
             return True
 
         return False
-
-    def findPPInfo(self, targetDate):
-        proposedDate = self.calcYearStartDate(targetDate.year)
-
-        if targetDate < proposedDate:
-            proposedDate = self.calcYearStartDate(targetDate.year - 1)
-
-        payPeriodNo = self.calcPPNumber(proposedDate, targetDate)
-        payPeriodDate = self.calcPPStartDate(proposedDate, payPeriodNo)
-
-        return proposedDate.year, payPeriodNo, payPeriodDate
