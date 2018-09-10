@@ -41,14 +41,6 @@ class PayCalendar:
         self.initialDate = initialDate
         self.yearTuple = yearTuple
 
-    def calcDaysInCompletedCycles(self, year):
-        """To reduce the number of loop iterations below, update the initialDate
-        by the number of days in the 56-year cycle for the number of cycles that
-        have transpired. Using floor division to divide the year difference by
-        56 provides the number of complete, transpired cycles.
-        """
-        return ((year - self.initialDate.year) // 56) * 20454
-
     def calcDaysToAdd(self, year):
         daysToAdd = self.calcDaysInCompletedCycles(year)
         startDate = self.initialDate + datetime.timedelta(days = daysToAdd)
@@ -58,6 +50,14 @@ class PayCalendar:
             daysToAdd += (14 * calcPayPeriodsInYear(initYear + yr))
 
         return daysToAdd
+
+    def calcDaysInCompletedCycles(self, year):
+        """To reduce the number of loop iterations below, update the initialDate
+        by the number of days in the 56-year cycle for the number of cycles that
+        have transpired. Using floor division to divide the year difference by
+        56 provides the number of complete, transpired cycles.
+        """
+        return ((year - self.initialDate.year) // 56) * 20454
 
     def calcPayPeriodsInYear(self, year):
         if year in self.yearTuple:
@@ -73,6 +73,12 @@ class PayCalendar:
 
         return payPeriodNo
 
+    def checkPPInRange(self, year, payPeriodNo):
+        if 1 <= payPeriodNo <= self.calcPayPeriodsInYear(year) :
+            return True
+
+        return False
+
     def calcPPStartDate(self, yearStartDate, payPeriodNo):
         if not self.checkPPInRange(yearStartDate.year, payPeriodNo):
             raise errors.PayPeriodError
@@ -87,12 +93,6 @@ class PayCalendar:
             raise errors.YearUnknownError(year)
 
         return self.initialDate + datetime.timedelta(days = self.calcDaysToAdd(year))
-
-    def checkPPInRange(self, year, payPeriodNo):
-        if 1 <= payPeriodNo <= self.calcPayPeriodsInYear(year) :
-            return True
-
-        return False
 
     def checkYearInRange(self, year):
         if min(self.yearTuple) - 10 <= year <= max(self.yearTuple) + 10:
