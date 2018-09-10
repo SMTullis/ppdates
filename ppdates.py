@@ -35,11 +35,11 @@ YEARSWITH27PPS = (1911, 1922, 1933, 1944, 1956,
 
 class PayCalendar:
     initialDate = None
-    yearList = ()
+    yearTuple = ()
 
-    def __init__(self, initialDate, yearList):
+    def __init__(self, initialDate, yearTuple):
         self.initialDate = initialDate
-        self.yearList = yearList
+        self.yearTuple = yearTuple
 
     def calcDaysInCompletedCycles(self, year):
         """To reduce the number of loop iterations below, update the initialDate
@@ -56,14 +56,14 @@ class PayCalendar:
         diff = year - initYear
 
         for yr in range(diff):
-            if (initYear + yr) in self.yearList:
+            if (initYear + yr) in self.yearTuple:
                 daysToAdd += 14 * 27
             else: daysToAdd += 14 * 26
 
         return daysToAdd
 
     def calcPayPeriodsInYear(self, year):
-        if year in self.yearList:
+        if year in self.yearTuple:
             return 27
 
         return 26
@@ -98,7 +98,7 @@ class PayCalendar:
         return False
 
     def checkYearInRange(self, year):
-        if min(self.yearList) - 10 <= year <= max(self.yearList) + 10:
+        if min(self.yearTuple) - 10 <= year <= max(self.yearTuple) + 10:
             return True
 
         return False
