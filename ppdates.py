@@ -47,7 +47,7 @@ class PayCalendar:
         initYear = startDate.year
 
         for yr in range(year - initYear):
-            daysToAdd += (14 * calcPayPeriodsInYear(initYear + yr))
+            daysToAdd += (14 * self.calcPayPeriodsInYear(initYear + yr))
 
         return daysToAdd
 
