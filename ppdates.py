@@ -53,9 +53,8 @@ class PayCalendar:
         daysToAdd = self.calcDaysInCompletedCycles(year)
         startDate = self.initialDate + datetime.timedelta(days = daysToAdd)
         initYear = startDate.year
-        diff = year - initYear
 
-        for yr in range(diff):
+        for yr in range(year - initYear):
             if (initYear + yr) in self.yearTuple:
                 daysToAdd += 14 * 27
             else: daysToAdd += 14 * 26
