@@ -130,3 +130,7 @@ class PayPeriod:
     def __init__(self, payPeriodNo, payPeriodStartDate):
         self.payPeriodNo = payPeriodNo
         self.payPeriodStartDate = payPeriodStartDate
+
+    def generateDateList(self):
+        self.dateList[0] = [self.payPeriodStartDate + datetime.timedelta(days = offset) for offset in range(7)]
+        self.dateList[1] = [self.payPeriodStartDate + datetime.timedelta(days = offset + 7) for offset in range(7)]
