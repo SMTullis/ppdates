@@ -99,3 +99,34 @@ class PayCalendar:
             return True
 
         return False
+
+    def generateYearCalendar(self, year):
+        return PayYear(year, self.calcYearStartDate(year), self.calcPayPeriodsInYear(year))
+
+class PayYear:
+    year = 0
+    yearStartDate = None
+    totalPayPeriods = 0
+    payPeriodList = []
+
+    def __init__(self, year, yearStartDate, totalPayPeriods):
+        self.year = year
+        self.yearStartDate = yearStartDate
+        self.totalPayPeriods = totalPayPeriods
+
+    def generatePayPeriodList(self):
+        self.payPeriodList = [PayPeriod(number + 1,
+            self.yearStartDate + datetime.timedelta(days = 14 * number))
+            for number in range(self.totalPayPeriods)]
+
+class PayPeriod:
+    payPeriodNo = 0
+    payPeriodStartDate = None
+    dateList = [
+        [],
+        []
+    ]
+
+    def __init__(self, payPeriodNo, payPeriodStartDate):
+        self.payPeriodNo = payPeriodNo
+        self.payPeriodStartDate = payPeriodStartDate
