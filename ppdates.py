@@ -100,6 +100,17 @@ class PayCalendar:
 
         return False
 
+    def generatePayPeriodRange(self, startDate, endDate):
+        year = self.calcYearStartDate(startDate.year)
+        start = self.calcPPStartDate(year, self.calcPPNumber(year, startDate))
+
+        year = self.calcYearStartDate(endDate.year)
+        end = self.calcPPStartDate(year, self.calcPPNumber(year, endDate))
+
+        payPeriods = ((end.toordinal() - start.toordinal()) // 14) +1
+
+        return [start + datetime.timedelta(days = 14 * pp) for pp in range(payPeriods)]
+
     def generateYearCalendar(self, year):
         return PayYear(year, self.calcYearStartDate(year), self.calcPayPeriodsInYear(year))
 
