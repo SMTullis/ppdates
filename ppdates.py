@@ -24,7 +24,7 @@ At the end of the 56th year, the cycle resets and begins anew.
 """
 
 import datetime
-import custom.ppdates.errors
+import github.SMTullis.ppdates.errors as errors
 
 INITDATE = datetime.date(1901, 1, 13)
 
