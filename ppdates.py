@@ -52,11 +52,6 @@ class PayCalendar:
         return daysToAdd
 
     def calcDaysInCompletedCycles(self, year):
-        """To reduce the number of loop iterations below, update the initialDate
-        by the number of days in the 56-year cycle for the number of cycles that
-        have transpired. Using floor division to divide the year difference by
-        56 provides the number of complete, transpired cycles.
-        """
         return ((year - self.initialDate.year) // 56) * 20454
 
     def calcPayPeriodsInYear(self, year):
