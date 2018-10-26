@@ -80,6 +80,10 @@ class PayCalendar:
 
         return yearStartDate + datetime.timedelta(days = (payPeriodNo - 1) * 14)
 
+    def calcPPStartDateByDate(self, yearStartDate, targetDate):
+        number = self.calcPPNumber(yearStartDate, targetDate)
+        return self.calcPPStartDate(yearStartDate, number)
+
     def calcYearsSinceInitialDate(self, targetYear):
         return targetYear - self.initialDate.year
 
