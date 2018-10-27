@@ -88,9 +88,6 @@ class PayCalendar:
         number = self.calc_pay_period_number(year_start_date, target_date)
         return self.calc_pay_period_start_date(year_start_date, number)
 
-    def calc_years_since_initial_date(self, target_year):
-        return target_year - self.initial_date.year
-
     def calc_year_start_date(self, year):
         if not self.is_year_in_range(year):
             raise errors.YearUnknownError(year)
