@@ -26,127 +26,128 @@ At the end of the 56th year, the cycle resets and begins anew.
 import datetime
 import github.SMTullis.ppdates.errors as errors
 
-INITDATE = datetime.date(1901, 1, 13)
+INIT_DATE = datetime.date(1901, 1, 13)
 
-YEARSWITH27PPS = (1911, 1922, 1933, 1944, 1956,
+YEARS_WITH_27PPS = (1911, 1922, 1933, 1944, 1956,
                 1967, 1978, 1989, 2000, 2012,
                 2023, 2034, 2045, 2056, 2068,
                 2079, 2090, 2101, 2112, 2124)
 
 class PayCalendar:
-    initialDate = None
-    yearTuple = ()
+    initial_date = None
+    year_tuple = ()
 
-    def __init__(self, initialDate, yearTuple):
-        self.initialDate = initialDate
-        self.yearTuple = yearTuple
+    def __init__(self, initial_date, year_tuple):
+        self.initial_date = initial_date
+        self.year_tuple = year_tuple
 
-    def calcDaysToAdd(self, year):
-        daysToAdd = self.calcDaysInCompletedCycles(year)
-        startDate = self.initialDate + datetime.timedelta(days = daysToAdd)
-        initYear = startDate.year
+    def calc_days_to_add(self, year):
+        days_to_add = self.calc_days_in_completed_cycles(year)
+        start_date = self.initial_date + datetime.timedelta(days = days_to_add)
+        initial_year = start_date.year
 
-        for yr in range(year - initYear):
-            daysToAdd += (14 * self.calcPayPeriodsInYear(initYear + yr))
+        for yr in range(year - initial_year):
+            days_to_add += (14 * self.calc_pay_periods_in_year(initial_year + yr))
 
-        return daysToAdd
+        return days_to_add
 
-    def calcDaysInCompletedCycles(self, year):
-        return ((year - self.initialDate.year) // 56) * 20454
+    def calc_days_in_completed_cycles(self, year):
+        return ((year - self.initial_date.year) // 56) * 20454
 
-    def calcPayPeriodsInYear(self, year):
-        if year in self.yearTuple:
+    def calc_pay_periods_in_year(self, year):
+        if year in self.year_tuple:
             return 27
 
         return 26
 
-    def calcPPNumber(self, yearStartDate, targetDate):
-        payPeriodNo = ((targetDate.toordinal() - yearStartDate.toordinal()) // 14) + 1
+    def calc_pay_period_number(self, year_start_date, target_date):
+        pay_period_no = ((target_date.toordinal() - year_start_date.toordinal()) // 14) + 1
 
-        if not self.checkPPInRange(yearStartDate.year, payPeriodNo):
+        if not self.is_pay_period_in_range(year_start_date.year, pay_period_no):
             raise errors.PayPeriodError
 
-        return payPeriodNo
+        return pay_period_no
 
-    def checkPPInRange(self, year, payPeriodNo):
-        if 1 <= payPeriodNo <= self.calcPayPeriodsInYear(year) :
+    def is_pay_period_in_range(self, year, pay_period_no):
+        if 1 <= pay_period_no <= self.calc_pay_periods_in_year(year) :
             return True
 
         return False
 
-    def calcPPStartDate(self, yearStartDate, payPeriodNo):
-        if not self.checkPPInRange(yearStartDate.year, payPeriodNo):
+    def calc_pay_period_start_date(self, year_start_date, pay_period_no):
+        if not self.is_pay_period_in_range(year_start_date.year, pay_period_no):
             raise errors.PayPeriodError
 
-        return yearStartDate + datetime.timedelta(days = (payPeriodNo - 1) * 14)
+        return year_start_date + datetime.timedelta(days = (pay_period_no - 1) * 14)
 
-    def calcPPStartDateByDate(self, yearStartDate, targetDate):
-        number = self.calcPPNumber(yearStartDate, targetDate)
-        return self.calcPPStartDate(yearStartDate, number)
+    def calc_pay_period_start_date_by_date(self, year_start_date, target_date):
+        number = self.calc_pay_period_number(year_start_date, target_date)
+        return self.calc_pay_period_start_date(year_start_date, number)
 
-    def calcYearsSinceInitialDate(self, targetYear):
-        return targetYear - self.initialDate.year
+    def calc_years_since_initial_date(self, target_year):
+        return target_year - self.initial_date.year
 
-    def calcYearStartDate(self, year):
-        if not self.checkYearInRange(year):
+    def calc_year_start_date(self, year):
+        if not self.is_year_in_range(year):
             raise errors.YearUnknownError(year)
 
-        return self.initialDate + datetime.timedelta(days = self.calcDaysToAdd(year))
+        return self.initial_date + datetime.timedelta(days = self.calc_days_to_add(year))
 
-    def checkYearInRange(self, year):
-        if min(self.yearTuple) - 10 <= year <= max(self.yearTuple) + 10:
+    def is_year_in_range(self, year):
+        if min(self.year_tuple) - 10 <= year <= max(self.year_tuple) + 10:
             return True
 
         return False
 
-    def generatePayPeriodRange(self, startDate, endDate):
-        year = self.calcYearStartDate(startDate.year)
-        start = self.calcPPStartDate(year, self.calcPPNumber(year, startDate))
+    def generate_pay_period_range(self, start_date, endDate):
+        year = self.calc_year_start_date(start_date.year)
+        start = self.calc_pay_period_start_date(year, self.calc_pay_period_number(year, start_date))
 
-        year = self.calcYearStartDate(endDate.year)
-        end = self.calcPPStartDate(year, self.calcPPNumber(year, endDate))
+        year = self.calc_year_start_date(endDate.year)
+        end = self.calc_pay_period_start_date(year, self.calc_pay_period_number(year, endDate))
 
-        payPeriods = ((end.toordinal() - start.toordinal()) // 14) +1
+        pay_periods = ((end.toordinal() - start.toordinal()) // 14) +1
 
-        return [start + datetime.timedelta(days = 14 * pp) for pp in range(payPeriods)]
+        return [start + datetime.timedelta(days = 14 * pp) for pp in range(pay_periods)]
 
-    def generateYearCalendar(self, year):
-        return PayYear(year, self.calcYearStartDate(year), self.calcPayPeriodsInYear(year))
+    def generate_year_calendar(self, year):
+        return PayYear(year, self.calc_year_start_date(year), self.calc_pay_periods_in_year(year))
 
 class PayYear:
     year = 0
-    yearStartDate = None
-    totalPayPeriods = 0
-    payPeriodList = []
+    year_start_date = None
+    total_pay_periods = 0
+    pay_period_list = []
 
-    def __init__(self, year, yearStartDate, totalPayPeriods):
+    def __init__(self, year, year_start_date, total_pay_periods):
         self.year = year
-        self.yearStartDate = yearStartDate
-        self.totalPayPeriods = totalPayPeriods
+        self.year_start_date = year_start_date
+        self.total_pay_periods = total_pay_periods
 
-    def generatePayPeriodList(self):
-        self.payPeriodList = [PayPeriod(number + 1,
-            self.yearStartDate + datetime.timedelta(days = 14 * number))
-            for number in range(self.totalPayPeriods)]
+    def generate_pay_period_list(self):
+        self.pay_period_list = [PayPeriod(number + 1,
+            self.year_start_date + datetime.timedelta(days = 14 * number))
+            for number in range(self.total_pay_periods)
+        ]
 
 class PayPeriod:
-    payPeriodNo = 0
-    payPeriodStartDate = None
-    dateList = [
+    id_no = 0
+    start_date = None
+    date_list = [
         [],
         []
     ]
 
-    def __init__(self, payPeriodNo, payPeriodStartDate):
-        self.payPeriodNo = payPeriodNo
-        self.payPeriodStartDate = payPeriodStartDate
+    def __init__(self, id_no, start_date):
+        self.id_no = id_no
+        self.start_date = start_date
 
-    def generateDateList(self):
-        self.dateList[0] = [
-            self.payPeriodStartDate + datetime.timedelta(days = offset) \
+    def generate_date_list(self):
+        self.date_list[0] = [
+            self.start_date + datetime.timedelta(days = offset) \
             for offset in range(7)
         ]
-        self.dateList[1] = [
-            self.payPeriodStartDate + datetime.timedelta(days = offset + 7) \
+        self.date_list[1] = [
+            self.start_date + datetime.timedelta(days = offset + 7) \
             for offset in range(7)
         ]
