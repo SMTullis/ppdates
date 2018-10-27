@@ -63,7 +63,9 @@ class PayCalendar:
         return 26
 
     def calc_pay_period_number(self, year_start_date, target_date):
-        pay_period_no = ((target_date.toordinal() - year_start_date.toordinal()) // 14) + 1
+        pay_period_no = calc_completed_pay_periods(
+            calc_days_between(target_date, year_start_date)
+        ) + 1
 
         if not self.is_pay_period_in_range(year_start_date.year, pay_period_no):
             raise errors.PayPeriodError
@@ -153,3 +155,9 @@ class PayPeriod:
             self.start_date + datetime.timedelta(days = offset + 7) \
             for offset in range(7)
         ]
+
+def calc_days_between(earlier, later):
+    return later.toordinal() - earlier.toordinal()
+
+def calc_completed_pay_periods(days):
+    return days // 14
