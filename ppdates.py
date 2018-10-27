@@ -64,7 +64,7 @@ class PayCalendar:
 
     def calc_pay_period_number(self, year_start_date, target_date):
         pay_period_no = calc_completed_pay_periods(
-            calc_days_between(target_date, year_start_date)
+            calc_days_between(year_start_date, target_date)
         ) + 1
 
         if not self.is_pay_period_in_range(year_start_date.year, pay_period_no):
