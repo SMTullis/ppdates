@@ -28,10 +28,12 @@ import github.SMTullis.ppdates.errors as errors
 
 INIT_DATE = datetime.date(1901, 1, 13)
 
-YEARS_WITH_27PPS = (1911, 1922, 1933, 1944, 1956,
-                1967, 1978, 1989, 2000, 2012,
-                2023, 2034, 2045, 2056, 2068,
-                2079, 2090, 2101, 2112, 2124)
+YEARS_WITH_27PPS = (
+    1911, 1922, 1933, 1944, 1956,
+    1967, 1978, 1989, 2000, 2012,
+    2023, 2034, 2045, 2056, 2068,
+    2079, 2090, 2101, 2112, 2124
+)
 
 class PayCalendar:
     initial_date = None
