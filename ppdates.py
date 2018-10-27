@@ -43,6 +43,18 @@ class PayCalendar:
         self.initial_date = initial_date
         self.year_tuple = year_tuple
 
+    def calc_year_start_date(self, year):
+        if not self.is_year_in_range(year):
+            raise errors.YearUnknownError(year)
+
+        return self.initial_date + datetime.timedelta(days = self.calc_days_to_add(year))
+
+    def is_year_in_range(self, year):
+        if min(self.year_tuple) - 10 <= year <= max(self.year_tuple) + 10:
+            return True
+
+        return False
+
     def calc_days_to_add(self, year):
         days_to_add = self.calc_days_in_completed_cycles(year)
         start_date = self.initial_date + datetime.timedelta(days = days_to_add)
@@ -87,18 +99,6 @@ class PayCalendar:
     def calc_pay_period_start_date_by_date(self, year_start_date, target_date):
         number = self.calc_pay_period_number(year_start_date, target_date)
         return self.calc_pay_period_start_date(year_start_date, number)
-
-    def calc_year_start_date(self, year):
-        if not self.is_year_in_range(year):
-            raise errors.YearUnknownError(year)
-
-        return self.initial_date + datetime.timedelta(days = self.calc_days_to_add(year))
-
-    def is_year_in_range(self, year):
-        if min(self.year_tuple) - 10 <= year <= max(self.year_tuple) + 10:
-            return True
-
-        return False
 
     def generate_pay_period_range(self, start_date, endDate):
         year = self.calc_year_start_date(start_date.year)
